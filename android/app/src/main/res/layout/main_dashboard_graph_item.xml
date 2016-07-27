@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="48dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="10">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="3dp"
+        android:layout_weight="9">
+
+        <LinearLayout
+            android:id="@+id/main_dashboard_content_holder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/main_dashboard_content_minus"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="3" />
+
+            <LinearLayout
+                android:id="@+id/main_dashboard_content_plus"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="97"
+                android:background="@drawable/round_square_blue_colured_5dp"></LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/main_dashboard_recyclerview_content_percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:text="51%"
+            android:textColor="#FFF"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/main_dashboard_recyclerview_content_date"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="24"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="15sp" />
+
+</LinearLayout>
