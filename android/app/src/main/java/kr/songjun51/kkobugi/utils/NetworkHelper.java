@@ -19,7 +19,7 @@ public class NetworkHelper {
     public static NetworkInterface getNetworkInstance(){
         if(retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://malang.moe:9000/")
+                    .baseUrl("http://kafuuchino.one:9000/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

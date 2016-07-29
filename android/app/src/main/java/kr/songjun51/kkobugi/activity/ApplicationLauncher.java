@@ -1,4 +1,4 @@
-package kr.songjun51.kkobugi;
+package kr.songjun51.kkobugi.activity;
 
 import android.app.Application;
 
@@ -13,5 +13,4 @@ public class ApplicationLauncher extends Application {
         super.onCreate();
         FacebookSdk.sdkInitialize(this);
     }
-
 }

@@ -2,6 +2,7 @@ package kr.songjun51.kkobugi.activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.facebook.login.widget.LoginButton;
 
 import kr.songjun51.kkobugi.R;
 import kr.songjun51.kkobugi.models.FacebookUser;
+import kr.songjun51.kkobugi.models.User;
 import kr.songjun51.kkobugi.utils.DataManager;
 import kr.songjun51.kkobugi.utils.NetworkHelper;
 import kr.songjun51.kkobugi.utils.NetworkInterface;
@@ -38,8 +40,27 @@ public class AuthActivity extends AppCompatActivity {
         dataManager = new DataManager();
         dataManager.initializeManager(this);
         service = NetworkHelper.getNetworkInstance();
+        validateUserToken();
+    }
 
-        LoginButton button = (LoginButton) findViewById(R.id.facebook_login);
+    private void validateUserToken() {
+        Pair<Boolean, User> userPair = dataManager.getActiveUser();
+        if (userPair.first == false) {
+            setFacebook();
+        } else {
+            // validate
+            switch (userPair.second.getUserType()) {
+                case 0:
+                    new LoadFacebookInfo().execute(dataManager.getFacebookUserCredential());
+                    break;
+            }
+        }
+    }
+
+    private void setFacebook() {
+        LoginButton fbLogin = (LoginButton) findViewById(R.id.facebook_login);
+        String permissions[] = new String[]{"email", "user_about_me", "user_friends"};
+        fbLogin.setReadPermissions(permissions);
         LoginManager.getInstance().registerCallback(manager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {

@@ -7,6 +7,7 @@ function init(app, User) {
     var mongoose = require('mongoose');
     var passport = require('passport');
     var randomString = require('randomstring');
+    var graph = require('fbgraphapi');
     app.use(passport.initialize());
     app.use(passport.session());
     var FacebookTokenStrategy = require('passport-facebook-token');
@@ -26,7 +27,7 @@ function init(app, User) {
     }, function (accessToken, refreshToken, profile, done) {
         console.log(profile);
         User.findOne({
-            'id' : profile.id
+            '_id' : profile.id
         }, function (err, user) {
             if(err){
                 return done(err);
@@ -38,7 +39,8 @@ function init(app, User) {
                     profile: profile.photos,
                     gender : profile.gender,
                     friends : [],
-                    phone : profile.phone
+                    phone : profile.phone,
+                    average : 0
                 });
                 user.save(function (err) {
                     if(err) console.log(err);
@@ -134,8 +136,12 @@ function init(app, User) {
     });
 
     app.post('/friend/facebook/find', function (req, res) {
-
-    })
+        var fb = new graph.Facebook(req.param('access_token'), 'v2.2');
+        fb.getAppFriends(function (err, result) {
+              console.log("Fb Friends! " +result);
+              res.send(200, result);
+        })
+    });
 
 
     app.post('/friend/local/find', function (req, res) {
@@ -182,7 +188,7 @@ function init(app, User) {
                 console.log("/friend/getlist error");
                 throw err;
             }
-
+            console.log("Requested ID : "+ req.param('id'));
             console.log("Founded : " + result);
             res.send(200, result.friends);
         })

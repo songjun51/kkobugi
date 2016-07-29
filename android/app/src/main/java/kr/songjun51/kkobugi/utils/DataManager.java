@@ -15,6 +15,8 @@ import kr.songjun51.kkobugi.models.User;
 
 public class DataManager {
     /* Data Keys */
+    public static final String KKOBUGI_TIME = "kkobugiTime";
+    public static final String SCREEN_ON_TIME = "screeenOnTime";
     public static final String USER_PROFILE_URL = "user_profile_url";
     public static final String IS_SILHOUETTE = "is_silhouette";
     public static final String HAS_ACTIVE_USER = "has_active_user";
@@ -47,6 +49,10 @@ public class DataManager {
         editor.apply();
     }
 
+    public String getUserCredential() {
+        return preferences.getString(USER_TOKEN, "");
+    }
+
     public void saveFacebookUserInfo(FacebookUser user) {
         editor.putInt(LOGIN_TYPE, 0);
         editor.putBoolean(HAS_ACTIVE_USER, true);
@@ -56,6 +62,7 @@ public class DataManager {
         editor.putBoolean(IS_SILHOUETTE, user.content.picture.data.is_silhouette);
         editor.apply();
     }
+
     public Pair<Boolean, User> getActiveUser() {
         if (preferences.getBoolean(HAS_ACTIVE_USER, false)) {
             int userType = preferences.getInt(LOGIN_TYPE, -1);
@@ -74,14 +81,25 @@ public class DataManager {
         } else return "";
     }
 
-//    public String[] getTwitterUserCredentials() {
-//        if (preferences.getBoolean(HAS_ACTIVE_USER, false) && preferences.getInt(LOGIN_TYPE, -1) == 1)
-//            return new String[]{preferences.getString(USER_TOKEN, ""),
-//                    preferences.getString(USER_TOKEN_SECRET, ""),
-//                    preferences.getString(USER_ID, "")
-//            };
-//        else return new String[]{""};
-//    }
+    public void saveKkobugiData(boolean isKkobugi) {
+        editor.putLong(SCREEN_ON_TIME, preferences.getLong(SCREEN_ON_TIME, 0) + 1000);
+        if (isKkobugi) editor.putLong(KKOBUGI_TIME, preferences.getLong(KKOBUGI_TIME, 0) + 1000);
+        editor.apply();
+    }
+
+    public void killTodaysKkobugi() {
+        editor.remove("screenOnTime");
+        editor.remove("kkobugiTime");
+        editor.apply();
+    }
+
+    public int getKkobugiPercentage() {
+        float kkobugiTime = preferences.getLong(KKOBUGI_TIME, 0);
+        float screenOnTime = preferences.getLong(SCREEN_ON_TIME, 0);
+        Log.e("asdf", kkobugiTime + " " + screenOnTime);
+        if (kkobugiTime == 0 || screenOnTime == 0) return 0;
+        return (int) ((kkobugiTime / screenOnTime) * 100);
+    }
 
     public void removeAllData() {
         editor.clear();
