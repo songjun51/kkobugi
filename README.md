@@ -1,5 +1,7 @@
 # kkobugi
 
+플레이스토어
+https://play.google.com/store/apps/details?id=com.songjun51.kkobugi
 
 Ver 1.0
 
